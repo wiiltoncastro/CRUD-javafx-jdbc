@@ -34,12 +34,12 @@ public class JanelaPrincipalControlador implements Initializable{
 	
 	@FXML
 	public void onMenuItemDepartamentoAction() {
-		System.out.println("onMenuItemDepartamentoAction");
+		carregarJanela("/gui/JanelaDepartamentoLista.fxml");
 	}
 	
 	@FXML
 	public void onMenuItemSobreAction() {
-		carregarJanela("/gui/Sobre.fxml");
+		carregarJanela("/gui/JanelaSobre.fxml");
 	}
 	
 	
