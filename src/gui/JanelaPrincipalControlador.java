@@ -3,6 +3,7 @@ package gui;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.function.Consumer;
 
 import application.Main;
 import gui.util.Alertas;
@@ -35,12 +36,15 @@ public class JanelaPrincipalControlador implements Initializable{
 	
 	@FXML
 	public void onMenuItemDepartamentoAction() {
-		carregarJanela2("/gui/JanelaDepartamentoLista.fxml");
+		carregarJanela("/gui/JanelaDepartamentoLista.fxml", (DepartamentoListaControlador controlador) -> {
+			controlador.setDepartamentoservico(new DepartamentoServico());
+			controlador.atualizarTableView();
+		});
 	}
 	
 	@FXML
 	public void onMenuItemSobreAction() {
-		carregarJanela("/gui/JanelaSobre.fxml");
+		carregarJanela("/gui/JanelaSobre.fxml", x -> {});
 	}
 	
 	
@@ -49,7 +53,7 @@ public class JanelaPrincipalControlador implements Initializable{
 		
 	}
 
-	private synchronized void carregarJanela(String nomeAbsoluto) {
+	private synchronized <T> void carregarJanela(String nomeAbsoluto, Consumer<T> iniciandoAcao) {
 		
 		try {
 			FXMLLoader carregador = new FXMLLoader(getClass().getResource(nomeAbsoluto));
@@ -63,30 +67,9 @@ public class JanelaPrincipalControlador implements Initializable{
 			vBoxPrincipal.getChildren().add(menuPrincipal);
 			vBoxPrincipal.getChildren().addAll(novoVBox.getChildren());
 			
+			T controlador = carregador.getController();
+			iniciandoAcao.accept(controlador);
 			
-		} catch(IOException e) {
-			Alertas.showAlert("IO Exceção", "Erro ao carregar tela", e.getMessage(), AlertType.ERROR);
-		}
-		
-	}
-	
-private synchronized void carregarJanela2(String nomeAbsoluto) {
-		
-		try {
-			FXMLLoader carregador = new FXMLLoader(getClass().getResource(nomeAbsoluto));
-			VBox novoVBox = carregador.load();
-			
-			Scene cenaPrincipal = Main.getCenaPrincipal();
-			VBox vBoxPrincipal = ((VBox)((ScrollPane)cenaPrincipal.getRoot()).getContent());
-			
-			Node menuPrincipal = vBoxPrincipal.getChildren().get(0);
-			vBoxPrincipal.getChildren().clear();
-			vBoxPrincipal.getChildren().add(menuPrincipal);
-			vBoxPrincipal.getChildren().addAll(novoVBox.getChildren());
-			
-			DepartamentoListaControlador controlador = carregador.getController();
-			controlador.setDepartamentoservico(new DepartamentoServico());
-			controlador.atualizarTableView();
 			
 		} catch(IOException e) {
 			Alertas.showAlert("IO Exceção", "Erro ao carregar tela", e.getMessage(), AlertType.ERROR);
