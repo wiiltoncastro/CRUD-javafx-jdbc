@@ -15,6 +15,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
+import model.servicos.DepartamentoServico;
 
 public class JanelaPrincipalControlador implements Initializable{
 
@@ -34,7 +35,7 @@ public class JanelaPrincipalControlador implements Initializable{
 	
 	@FXML
 	public void onMenuItemDepartamentoAction() {
-		carregarJanela("/gui/JanelaDepartamentoLista.fxml");
+		carregarJanela2("/gui/JanelaDepartamentoLista.fxml");
 	}
 	
 	@FXML
@@ -62,6 +63,30 @@ public class JanelaPrincipalControlador implements Initializable{
 			vBoxPrincipal.getChildren().add(menuPrincipal);
 			vBoxPrincipal.getChildren().addAll(novoVBox.getChildren());
 			
+			
+		} catch(IOException e) {
+			Alertas.showAlert("IO Exceção", "Erro ao carregar tela", e.getMessage(), AlertType.ERROR);
+		}
+		
+	}
+	
+private synchronized void carregarJanela2(String nomeAbsoluto) {
+		
+		try {
+			FXMLLoader carregador = new FXMLLoader(getClass().getResource(nomeAbsoluto));
+			VBox novoVBox = carregador.load();
+			
+			Scene cenaPrincipal = Main.getCenaPrincipal();
+			VBox vBoxPrincipal = ((VBox)((ScrollPane)cenaPrincipal.getRoot()).getContent());
+			
+			Node menuPrincipal = vBoxPrincipal.getChildren().get(0);
+			vBoxPrincipal.getChildren().clear();
+			vBoxPrincipal.getChildren().add(menuPrincipal);
+			vBoxPrincipal.getChildren().addAll(novoVBox.getChildren());
+			
+			DepartamentoListaControlador controlador = carregador.getController();
+			controlador.setDepartamentoservico(new DepartamentoServico());
+			controlador.atualizarTableView();
 			
 		} catch(IOException e) {
 			Alertas.showAlert("IO Exceção", "Erro ao carregar tela", e.getMessage(), AlertType.ERROR);
