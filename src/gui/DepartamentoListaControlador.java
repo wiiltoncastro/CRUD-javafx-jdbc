@@ -24,10 +24,13 @@ public class DepartamentoListaControlador implements Initializable{
 	//atributos
 	@FXML
 	private Button botaoNovo;
+	
 	@FXML
 	private TableView<Departamento> tableViewDepartamentos;
+	
 	@FXML
 	private TableColumn<Departamento, Integer> tableColunaId;
+	
 	@FXML
 	private TableColumn<Departamento, String> tableColunaNome;
 	

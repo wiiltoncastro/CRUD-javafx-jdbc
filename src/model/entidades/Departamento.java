@@ -5,7 +5,8 @@ import java.io.Serializable;
 public class Departamento implements Serializable{
 
 	private static final long serialVersionUID = 1L;
-	
+
+	//atributos
 	private Integer id;
 	private String nome;
 	
@@ -32,7 +33,6 @@ public class Departamento implements Serializable{
 		this.nome = nome;
 	}
 	
-	
 	//hashCode e equals
 	@Override
 	public int hashCode() {
@@ -41,7 +41,6 @@ public class Departamento implements Serializable{
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
-	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
