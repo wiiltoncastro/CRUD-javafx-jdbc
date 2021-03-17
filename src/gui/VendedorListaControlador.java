@@ -31,6 +31,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.entidades.Vendedor;
+import model.servicos.DepartamentoServico;
 import model.servicos.VendedorServico;
 
 public class VendedorListaControlador implements Initializable, MudancaDadosListener {
@@ -116,7 +117,8 @@ public class VendedorListaControlador implements Initializable, MudancaDadosList
 
 			VendedorFormatoControlador controlador = carregador.getController();
 			controlador.setVendedor(dep);
-			controlador.setVendedorServico(new VendedorServico());
+			controlador.setServicos(new VendedorServico(), new DepartamentoServico());
+			controlador.carregarObjetosAssociados();
 			controlador.inscreverMudancaDadosListener(this);
 			controlador.atualizarDadosFormulario();
 
@@ -129,6 +131,7 @@ public class VendedorListaControlador implements Initializable, MudancaDadosList
 			dialogoPalco.showAndWait();
 
 		} catch (IOException e) {
+			e.printStackTrace();
 			Alertas.showAlert("IO Exceção", "Error! Carregando Janela", e.getMessage(), AlertType.ERROR);
 		}
 	}

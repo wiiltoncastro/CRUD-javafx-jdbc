@@ -172,6 +172,7 @@ public class DepartamentoListaControlador implements Initializable, MudancaDados
 				departamentoservico.remover(dep);
 				atualizarTableView();
 			} catch (DbIntegrityException e) {
+				e.printStackTrace();
 				Alertas.showAlert("Erro removendo Departamento", null, e.getMessage(), AlertType.ERROR);
 			}
 		}
