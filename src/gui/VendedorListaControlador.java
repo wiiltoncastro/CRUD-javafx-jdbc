@@ -1,5 +1,6 @@
 package gui;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.Date;
 import java.util.List;
@@ -16,7 +17,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
@@ -24,6 +27,8 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.Pane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.entidades.Vendedor;
 import model.servicos.VendedorServico;
@@ -105,27 +110,27 @@ public class VendedorListaControlador implements Initializable, MudancaDadosList
 	}
 
 	private void criarFormatoDeDialogo(Vendedor dep, String nomeAbsoluto, Stage parentStage) {
-//		try {
-//			FXMLLoader carregador = new FXMLLoader(getClass().getResource(nomeAbsoluto));
-//			Pane painel = carregador.load();
-//
-//			VendedorFormatoControlador controlador = carregador.getController();
-//			controlador.setVendedor(dep);
-//			controlador.setVendedorServico(new VendedorServico());
-//			controlador.inscreverMudancaDadosListener(this);
-//			controlador.atualizarDadosFormulario();
-//
-//			Stage dialogoPalco = new Stage();
-//			dialogoPalco.setTitle("Dados do Vendedor");
-//			dialogoPalco.setScene(new Scene(painel));
-//			dialogoPalco.setResizable(false);
-//			dialogoPalco.initOwner(parentStage);
-//			dialogoPalco.initModality(Modality.WINDOW_MODAL);
-//			dialogoPalco.showAndWait();
-//
-//		} catch (IOException e) {
-//			Alertas.showAlert("IO Exceção", "Error! Carregando Janela", e.getMessage(), AlertType.ERROR);
-//		}
+		try {
+			FXMLLoader carregador = new FXMLLoader(getClass().getResource(nomeAbsoluto));
+			Pane painel = carregador.load();
+
+			VendedorFormatoControlador controlador = carregador.getController();
+			controlador.setVendedor(dep);
+			controlador.setVendedorServico(new VendedorServico());
+			controlador.inscreverMudancaDadosListener(this);
+			controlador.atualizarDadosFormulario();
+
+			Stage dialogoPalco = new Stage();
+			dialogoPalco.setTitle("Dados do Vendedor");
+			dialogoPalco.setScene(new Scene(painel));
+			dialogoPalco.setResizable(false);
+			dialogoPalco.initOwner(parentStage);
+			dialogoPalco.initModality(Modality.WINDOW_MODAL);
+			dialogoPalco.showAndWait();
+
+		} catch (IOException e) {
+			Alertas.showAlert("IO Exceção", "Error! Carregando Janela", e.getMessage(), AlertType.ERROR);
+		}
 	}
 
 	@Override
