@@ -54,7 +54,8 @@ public class DepartamentoListaControlador implements Initializable{
 	@FXML
 	public void onBotaoNovoAction(ActionEvent evento) {
 		Stage parentStage = Utils.palcoAtual(evento);
-		criarFormatoDeDialogo("/gui/DepartamentoFormato.fxml", parentStage);
+		Departamento dep = new Departamento();
+		criarFormatoDeDialogo(dep, "/gui/DepartamentoFormato.fxml", parentStage);
 	}
 	
 	@Override
@@ -79,10 +80,15 @@ public class DepartamentoListaControlador implements Initializable{
 		tableViewDepartamentos.setItems(obsLista);
 	}
 	
-	private void criarFormatoDeDialogo(String nomeAbsoluto, Stage parentStage) {
+	private void criarFormatoDeDialogo(Departamento dep, String nomeAbsoluto, Stage parentStage) {
 		try {
 			FXMLLoader carregador = new FXMLLoader(getClass().getResource(nomeAbsoluto));
 			Pane painel = carregador.load();
+			
+			DepartamentoFormatoControlador controlador = carregador.getController();
+			controlador.setDepartamento(dep);
+			controlador.setDepartamentoServico(new DepartamentoServico());
+			controlador.atualizarDadosFormulario();
 			
 			Stage dialogoPalco = new Stage();
 			dialogoPalco.setTitle("Dados do Departamento");

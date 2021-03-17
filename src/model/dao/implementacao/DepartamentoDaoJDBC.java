@@ -133,7 +133,7 @@ public class DepartamentoDaoJDBC implements DepartamentoDao{
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		try {
-			st = conn.prepareStatement("SELECT * FROM departamento ORDER BY Nome");
+			st = conn.prepareStatement("SELECT * FROM departamento ORDER BY Id");
 			
 			rs = st.executeQuery();
 			

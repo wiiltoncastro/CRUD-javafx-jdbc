@@ -10,4 +10,13 @@ public class Utils {
 		return (Stage) ((Node) evento.getSource()).getScene().getWindow();
 	}
 	
+	public static Integer tentarConverterParaInteiro(String string) {
+		try {
+			return Integer.parseInt(string);
+		}
+		catch(NumberFormatException e) {
+			return null;
+		}
+	}
+	
 }
