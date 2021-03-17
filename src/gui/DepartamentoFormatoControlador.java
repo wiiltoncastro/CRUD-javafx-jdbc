@@ -3,7 +3,9 @@ package gui;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 import db.DbException;
 import gui.listeners.MudancaDadosListener;
@@ -18,17 +20,18 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import model.entidades.Departamento;
+import model.excecoes.ExcecaoValidacao;
 import model.servicos.DepartamentoServico;
 
 public class DepartamentoFormatoControlador implements Initializable {
 
-	//dependencias
+	// dependencias
 	private Departamento entidade;
 	private DepartamentoServico servico;
-	
+
 	private List<MudancaDadosListener> listaMudancaDadosListeners = new ArrayList<>();
-	
-	//atributos
+
+	// atributos
 	@FXML
 	private Button botaoSalvar;
 	@FXML
@@ -39,8 +42,8 @@ public class DepartamentoFormatoControlador implements Initializable {
 	private TextField txtId;
 	@FXML
 	private Label labelErroNome;
-	
-	//set
+
+	// set
 	public void setDepartamento(Departamento entidade) {
 		this.entidade = entidade;
 	}
@@ -52,8 +55,8 @@ public class DepartamentoFormatoControlador implements Initializable {
 	public void inscreverMudancaDadosListener(MudancaDadosListener ouvinte) {
 		listaMudancaDadosListeners.add(ouvinte);
 	}
-	
-	//metodos
+
+	// metodos
 	@FXML
 	public void onBotaoSalvarAction(ActionEvent evento) {
 		if (entidade == null) {
@@ -68,6 +71,9 @@ public class DepartamentoFormatoControlador implements Initializable {
 			notificarMudancaDadosListener();
 			Utils.palcoAtual(evento).close();
 		}
+		catch (ExcecaoValidacao e) {
+			setErroMensagem(e.getErros());
+		}
 		catch (DbException e) {
 			Alertas.showAlert("Erro salvando Objeto", null, e.getMessage(), AlertType.ERROR);
 		}
@@ -81,10 +87,20 @@ public class DepartamentoFormatoControlador implements Initializable {
 
 	private Departamento getDadoFormulario() {
 		Departamento dep = new Departamento();
-		
+
+		ExcecaoValidacao excecao = new ExcecaoValidacao("Erro Validação!");
+
 		dep.setId(Utils.tentarConverterParaInteiro(txtId.getText()));
+
+		if (txtNome.getText() == null || txtNome.getText().trim().equals("")) {
+			excecao.adicionarErro("nome", " O campo não pode ser vazio");
+		}
 		dep.setNome(txtNome.getText());
-		
+
+		if (excecao.getErros().size() > 0) {
+			throw excecao;
+		}
+
 		return dep;
 	}
 
@@ -97,7 +113,7 @@ public class DepartamentoFormatoControlador implements Initializable {
 	public void initialize(URL url, ResourceBundle rb) {
 		inicializarNodes();
 	}
-	
+
 	public void inicializarNodes() {
 		Restricoes.setTextFieldInteger(txtId);
 		Restricoes.setTextFieldMaxLength(txtNome, 30);
@@ -110,4 +126,13 @@ public class DepartamentoFormatoControlador implements Initializable {
 		txtId.setText(String.valueOf(entidade.getId()));
 		txtNome.setText(entidade.getNome());
 	}
+	
+	private void setErroMensagem(Map<String, String> erros) {
+		Set<String> campos = erros.keySet();
+		
+		if (campos.contains("nome")) {
+			labelErroNome.setText(erros.get("nome"));
+		}
+	}
+	
 }
