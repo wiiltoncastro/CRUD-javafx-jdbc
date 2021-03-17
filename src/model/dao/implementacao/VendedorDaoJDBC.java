@@ -168,7 +168,7 @@ public class VendedorDaoJDBC implements VendedorDao{
 					"SELECT vendedor.*,departamento.Nome as DepNome "
 					+ "FROM vendedor INNER JOIN departamento "
 					+ "ON vendedor.DepartamentoId = departamento.Id "
-					+ "ORDER BY Nome");
+					+ "ORDER BY Id");
 			
 			rs = st.executeQuery();
 			
