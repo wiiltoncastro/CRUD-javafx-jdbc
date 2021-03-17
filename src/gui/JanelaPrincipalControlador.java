@@ -17,6 +17,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 import model.servicos.DepartamentoServico;
+import model.servicos.VendedorServico;
 
 public class JanelaPrincipalControlador implements Initializable{
 
@@ -31,7 +32,10 @@ public class JanelaPrincipalControlador implements Initializable{
 	
 	@FXML
 	public void onMenuItemVendedorAction() {
-		System.out.println("onMenuItemVendedorAction");
+		carregarJanela("/gui/JanelaVendedorLista.fxml", (VendedorListaControlador controlador) -> {
+			controlador.setVendedorservico(new VendedorServico());
+			controlador.atualizarTableView();
+		});
 	}
 	
 	@FXML
