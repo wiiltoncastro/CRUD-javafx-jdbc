@@ -23,4 +23,8 @@ public class DepartamentoServico {
 		}
 	}
 	
+	public void remover(Departamento dep) {
+		dao.deletePorId(dep.getId());	
+	}
+	
 }
