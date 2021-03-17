@@ -11,6 +11,5 @@ public class Alertas {
 		alert.setHeaderText(header);
 		alert.setContentText(content);
 		alert.show();
-		
 	}
 }

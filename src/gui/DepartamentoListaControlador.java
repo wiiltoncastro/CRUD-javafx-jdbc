@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import application.Main;
+import gui.listeners.MudancaDadosListener;
 import gui.util.Alertas;
 import gui.util.Utils;
 import javafx.collections.FXCollections;
@@ -26,7 +27,7 @@ import javafx.stage.Stage;
 import model.entidades.Departamento;
 import model.servicos.DepartamentoServico;
 
-public class DepartamentoListaControlador implements Initializable{
+public class DepartamentoListaControlador implements Initializable, MudancaDadosListener{
 
 	private DepartamentoServico departamentoservico;
 	
@@ -88,6 +89,7 @@ public class DepartamentoListaControlador implements Initializable{
 			DepartamentoFormatoControlador controlador = carregador.getController();
 			controlador.setDepartamento(dep);
 			controlador.setDepartamentoServico(new DepartamentoServico());
+			controlador.inscreverMudancaDadosListener(this);
 			controlador.atualizarDadosFormulario();
 			
 			Stage dialogoPalco = new Stage();
@@ -102,6 +104,11 @@ public class DepartamentoListaControlador implements Initializable{
 		catch(IOException e) {
 			Alertas.showAlert("IO Exceção", "Error! Carregando Janela", e.getMessage(), AlertType.ERROR);
 		}
+	}
+
+	@Override
+	public void onMudancaDados() {
+		atualizarTableView();
 	}
 	
 }

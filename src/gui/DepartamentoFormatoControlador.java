@@ -1,19 +1,22 @@
 package gui;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import db.DbException;
+import gui.listeners.MudancaDadosListener;
 import gui.util.Alertas;
 import gui.util.Restricoes;
 import gui.util.Utils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Alert.AlertType;
 import model.entidades.Departamento;
 import model.servicos.DepartamentoServico;
 
@@ -22,6 +25,8 @@ public class DepartamentoFormatoControlador implements Initializable {
 	//dependencias
 	private Departamento entidade;
 	private DepartamentoServico servico;
+	
+	private List<MudancaDadosListener> listaMudancaDadosListeners = new ArrayList<>();
 	
 	//atributos
 	@FXML
@@ -44,6 +49,10 @@ public class DepartamentoFormatoControlador implements Initializable {
 		this.servico = servico;
 	}
 
+	public void inscreverMudancaDadosListener(MudancaDadosListener ouvinte) {
+		listaMudancaDadosListeners.add(ouvinte);
+	}
+	
 	//metodos
 	@FXML
 	public void onBotaoSalvarAction(ActionEvent evento) {
@@ -56,10 +65,17 @@ public class DepartamentoFormatoControlador implements Initializable {
 		try {
 			entidade = getDadoFormulario();
 			servico.salvarOuAtualizar(entidade);
+			notificarMudancaDadosListener();
 			Utils.palcoAtual(evento).close();
 		}
 		catch (DbException e) {
 			Alertas.showAlert("Erro salvando Objeto", null, e.getMessage(), AlertType.ERROR);
+		}
+	}
+
+	private void notificarMudancaDadosListener() {
+		for (MudancaDadosListener ouvinte : listaMudancaDadosListeners) {
+			ouvinte.onMudancaDados();
 		}
 	}
 
